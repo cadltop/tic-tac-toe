@@ -8,5 +8,17 @@ function player(name, choice) {
 };
 
 const game = (function() {
-    return {winnerName, winnerChoice};
+    let getWinner;
+    const options = {
+        cross: 'x',
+        circle: 'o'
+    };
+
+    let humanChoice = prompt('Make a choice (x || o):', '');
+    let computerChoice = humanChoice == options.cross ? options.circle : options.cross;
+
+    const humanPlayer = player('Human', humanChoice);
+    const computerPlayer = player('Computer', computerChoice);
+
+    return {getWinner};
 })();
