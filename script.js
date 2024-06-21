@@ -6,3 +6,7 @@ const gameBoard = (function() {
 function player(name, choice) {
     return {name, choice};
 };
+
+const game = (function() {
+    return {winnerName, winnerChoice};
+})();
