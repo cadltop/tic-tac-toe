@@ -7,6 +7,16 @@ function player(name, choice) {
     return {name, choice};
 };
 
+const displayController = (function() {
+    const gridSquares = document.querySelectorAll('.grid > *');
+    const showBoard = function() {
+        for(let i = 0; i < gridSquares.length; i++) {
+            gridSquares[i].innerHTML = gameBoard.board[i];
+        };
+    };
+    return {gridSquares, showBoard};
+})();
+
 const game = (function() {
     let getWinner;
     const options = {
@@ -25,17 +35,21 @@ const game = (function() {
         const humanPosition = parseInt(prompt('Take a position (0-8)', ''));
         if(gameBoard.board[humanPosition] !== human.choice && gameBoard.board[humanPosition] !== computer.choice) {
             gameBoard.board[humanPosition] = human.choice;
+            displayController.gridSquares[humanPosition].innerHTML = human.choice;
             let computerPosition = Math.round((Math.random() * 7) + 1);
             if(gameBoard.board[computerPosition] !== human.choice && gameBoard.board[computerPosition] !== computer.choice) {
                 gameBoard.board[computerPosition] = computer.choice;
+                displayController.gridSquares[computerPosition].innerHTML = computer.choice;
                 console.log(gameBoard.board);
             } else {
                 while(gameBoard.board[computerPosition] === human.choice || gameBoard.board[computerPosition] === computer.choice) {
                     computerPosition = Math.round((Math.random() * 7) + 1);
                 };
                 gameBoard.board[computerPosition] = computer.choice;
+                displayController.gridSquares[computerPosition].innerHTML = computer.choice;
                 console.log(gameBoard.board);
             };
+            displayController.showBoard();
             checkGameEnd();
         } else {
             alert('This field has been taken already');
