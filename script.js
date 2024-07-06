@@ -10,12 +10,13 @@ function player(name, choice) {
 const displayController = (function() {
     const gridSquares = document.querySelectorAll('.grid > *');
     const choiceButtons = document.querySelectorAll('.choices > *');
-    const showBoard = function() {
-        for(let i = 0; i < gridSquares.length; i++) {
-            gridSquares[i].innerHTML = gameBoard.board[i];
-        };
+
+    const markBoard = function(playerChoice, playerPosition) {
+        gameBoard.board[playerPosition] = playerChoice;
+        gridSquares[playerPosition].innerHTML = gameBoard.board[playerPosition];
+        displayController.gridSquares[playerPosition].innerHTML = playerChoice;
     };
-    return {gridSquares, choiceButtons, showBoard};
+    return {gridSquares, choiceButtons, markBoard};
 })();
 
 const game = (function() {
@@ -39,30 +40,24 @@ const game = (function() {
 
         const human = player('Human', humanChoice);
         const computer = player('Computer', computerChoice);
-        console.log(gameBoard.board);
 
-        // get choices
-        let humanPosition;
-        for(let i = 0; i < displayController.gridSquares.length; i++) {
-            displayController.gridSquares[i].addEventListener('click', () => {
-                humanPosition = i;
+        // mark board
+        for(let humanPosition = 0; humanPosition < displayController.gridSquares.length; humanPosition++) {
+            displayController.gridSquares[humanPosition].addEventListener('click', () => {
                 if(gameBoard.board[humanPosition] !== human.choice && gameBoard.board[humanPosition] !== computer.choice) {
-                    gameBoard.board[humanPosition] = human.choice;
-                    displayController.gridSquares[humanPosition].innerHTML = human.choice;
+                    displayController.markBoard(human.choice, humanPosition);
+
                     let computerPosition = Math.round((Math.random() * 7) + 1);
                     if(gameBoard.board[computerPosition] !== human.choice && gameBoard.board[computerPosition] !== computer.choice) {
-                        gameBoard.board[computerPosition] = computer.choice;
-                        displayController.gridSquares[computerPosition].innerHTML = computer.choice;
+                        displayController.markBoard(computer.choice, computerPosition);
                         console.log(gameBoard.board);
                     } else {
                         while(gameBoard.board[computerPosition] === human.choice || gameBoard.board[computerPosition] === computer.choice) {
                             computerPosition = Math.round((Math.random() * 7) + 1);
                         };
-                        gameBoard.board[computerPosition] = computer.choice;
-                        displayController.gridSquares[computerPosition].innerHTML = computer.choice;
+                        displayController.markBoard(computer.choice, computerPosition);
                         console.log(gameBoard.board);
                     };
-                    displayController.showBoard();
                     
                     // rules of game
                     for(let option in options) {
@@ -70,30 +65,26 @@ const game = (function() {
                             if(gameBoard.board[i] === options[option] && 
                                 gameBoard.board[i+1] === options[option] && 
                                 gameBoard.board[+2] === options[option]) {
-                                game.getWinner = (human.choice === options[option]) ? 
-                                `${human.name} is the winner!!`:
-                                `${computer.name} is the winner!!`;
+                                declareGetWinner();
                             };
                         };
                         for(let i = 0; i <= 2; i++){
                             if(gameBoard.board[i] === options[option] && 
                                 gameBoard.board[i+3] === options[option] && 
                                 gameBoard.board[i+6] === options[option]) {
-                                game.getWinner = (human.choice === options[option]) ? 
-                                `${human.name} is the winner!!`:
-                                `${computer.name} is the winner!!`;
+                                declareGetWinner();
                             };
                         };
-                        if(gameBoard.board[0] === options[option] && 
+                        if((gameBoard.board[0] === options[option] && 
                             gameBoard.board[4] === options[option] && 
-                            gameBoard.board[8] === options[option]) {
-                            game.getWinner = (human.choice === options[option]) ? 
-                            `${human.name} is the winner!!`:
-                            `${computer.name} is the winner!!`;
+                            gameBoard.board[8] === options[option]) ||
+                            (gameBoard.board[2] === options[option] && 
+                            gameBoard.board[4] === options[option] && 
+                            gameBoard.board[6] === options[option])) {
+                            declareGetWinner();
                         };
-                        if(gameBoard.board[2] === options[option] && 
-                            gameBoard.board[4] === options[option] && 
-                            gameBoard.board[6] === options[option]) {
+                        
+                        function declareGetWinner() {   
                             game.getWinner = (human.choice === options[option]) ? 
                             `${human.name} is the winner!!`:
                             `${computer.name} is the winner!!`;
@@ -108,5 +99,3 @@ const game = (function() {
     
     return {getWinner};
 })();
-
-console.log(game.getWinner);
