@@ -70,7 +70,7 @@ const game = (function() {
                             if(gameBoard.board[i] === options[option] && 
                                 gameBoard.board[i+1] === options[option] && 
                                 gameBoard.board[+2] === options[option]) {
-                                getWinner = (human.choice === options[option]) ? 
+                                game.getWinner = (human.choice === options[option]) ? 
                                 `${human.name} is the winner!!`:
                                 `${computer.name} is the winner!!`;
                             };
@@ -79,7 +79,7 @@ const game = (function() {
                             if(gameBoard.board[i] === options[option] && 
                                 gameBoard.board[i+3] === options[option] && 
                                 gameBoard.board[i+6] === options[option]) {
-                                getWinner = (human.choice === options[option]) ? 
+                                game.getWinner = (human.choice === options[option]) ? 
                                 `${human.name} is the winner!!`:
                                 `${computer.name} is the winner!!`;
                             };
@@ -87,14 +87,14 @@ const game = (function() {
                         if(gameBoard.board[0] === options[option] && 
                             gameBoard.board[4] === options[option] && 
                             gameBoard.board[8] === options[option]) {
-                            getWinner = (human.choice === options[option]) ? 
+                            game.getWinner = (human.choice === options[option]) ? 
                             `${human.name} is the winner!!`:
                             `${computer.name} is the winner!!`;
                         };
                         if(gameBoard.board[2] === options[option] && 
                             gameBoard.board[4] === options[option] && 
                             gameBoard.board[6] === options[option]) {
-                            getWinner = (human.choice === options[option]) ? 
+                            game.getWinner = (human.choice === options[option]) ? 
                             `${human.name} is the winner!!`:
                             `${computer.name} is the winner!!`;
                         };
