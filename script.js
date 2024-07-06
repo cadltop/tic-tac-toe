@@ -41,7 +41,6 @@ const game = (function() {
         const human = player('Human', humanChoice);
         const computer = player('Computer', computerChoice);
 
-        // mark board
         for(let humanPosition = 0; humanPosition < displayController.gridSquares.length; humanPosition++) {
             displayController.gridSquares[humanPosition].addEventListener('click', () => {
                 if(gameBoard.board[humanPosition] !== human.choice && gameBoard.board[humanPosition] !== computer.choice) {
@@ -50,16 +49,13 @@ const game = (function() {
                     let computerPosition = Math.round((Math.random() * 7) + 1);
                     if(gameBoard.board[computerPosition] !== human.choice && gameBoard.board[computerPosition] !== computer.choice) {
                         displayController.markBoard(computer.choice, computerPosition);
-                        console.log(gameBoard.board);
                     } else {
                         while(gameBoard.board[computerPosition] === human.choice || gameBoard.board[computerPosition] === computer.choice) {
                             computerPosition = Math.round((Math.random() * 7) + 1);
                         };
                         displayController.markBoard(computer.choice, computerPosition);
-                        console.log(gameBoard.board);
                     };
                     
-                    // rules of game
                     for(let option in options) {
                         for(let i = 0; i <= 6; i+=3){
                             if(gameBoard.board[i] === options[option] && 
