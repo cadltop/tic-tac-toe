@@ -34,9 +34,9 @@ const game = (function() {
         afterChoice(options.circle, options.cross);
     });
 
-    function afterChoice(humanChoice, computerChoice) {
-        const player1 = player('Player 1', humanChoice);
-        const player2 = player('Player 2', computerChoice);
+    function afterChoice(player1Choice, player2Choice) {
+        const player1 = player('Player 1', player1Choice);
+        const player2 = player('Player 2', player2Choice);
 
         for(let i = 0; i < displayController.gridSquares.length; i++) {
             displayController.gridSquares[i].addEventListener('click', () => {
