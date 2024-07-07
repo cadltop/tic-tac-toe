@@ -1,5 +1,5 @@
 const gameBoard = (function() {
-    let board = ['0', '1', '2', '3', '4', '5', '6', '7', '8'];
+    let board = ['', '', '', '', '', '', '', '', ''];
     return {board};
 })();
 
@@ -16,45 +16,38 @@ const displayController = (function() {
         gridSquares[playerPosition].innerHTML = gameBoard.board[playerPosition];
         displayController.gridSquares[playerPosition].innerHTML = playerChoice;
     };
+
     return {gridSquares, choiceButtons, markBoard};
 })();
 
 const game = (function() {
-    let getWinner;
+    let getWinner, activePlayer = true;
     const options = {
         cross: 'x',
         circle: 'o'
     };
-    let humanChoice;
+
     displayController.choiceButtons[0].addEventListener('click', () => {
-        humanChoice = 'x';
-        afterChoice();
+        afterChoice(options.cross, options.circle);
     });
     displayController.choiceButtons[1].addEventListener('click', () => {
-        humanChoice = 'o';
-        afterChoice();
+        afterChoice(options.circle, options.cross);
     });
 
-    function afterChoice() {
-        const computerChoice = (humanChoice == options.cross) ? options.circle : options.cross;
+    function afterChoice(humanChoice, computerChoice) {
+        const player1 = player('Player 1', humanChoice);
+        const player2 = player('Player 2', computerChoice);
 
-        const human = player('Human', humanChoice);
-        const computer = player('Computer', computerChoice);
-
-        for(let humanPosition = 0; humanPosition < displayController.gridSquares.length; humanPosition++) {
-            displayController.gridSquares[humanPosition].addEventListener('click', () => {
-                if(gameBoard.board[humanPosition] !== human.choice && gameBoard.board[humanPosition] !== computer.choice) {
-                    displayController.markBoard(human.choice, humanPosition);
-
-                    let computerPosition = Math.round((Math.random() * 7) + 1);
-                    if(gameBoard.board[computerPosition] !== human.choice && gameBoard.board[computerPosition] !== computer.choice) {
-                        displayController.markBoard(computer.choice, computerPosition);
+        for(let i = 0; i < displayController.gridSquares.length; i++) {
+            displayController.gridSquares[i].addEventListener('click', () => {
+                if(gameBoard.board[i] !== player1.choice && gameBoard.board[i] !== player2.choice) {
+                    if(activePlayer === true) {
+                        displayController.markBoard(player1.choice, i);
+                        activePlayer = false;
                     } else {
-                        while(gameBoard.board[computerPosition] === human.choice || gameBoard.board[computerPosition] === computer.choice) {
-                            computerPosition = Math.round((Math.random() * 7) + 1);
-                        };
-                        displayController.markBoard(computer.choice, computerPosition);
-                    };
+                        displayController.markBoard(player2.choice, i);
+                        activePlayer = true;
+                    }
                     
                     for(let option in options) {
                         for(let i = 0; i <= 6; i+=3){
@@ -81,13 +74,13 @@ const game = (function() {
                         };
                         
                         function declareGetWinner() {   
-                            game.getWinner = (human.choice === options[option]) ? 
-                            `${human.name} is the winner!!`:
-                            `${computer.name} is the winner!!`;
+                            game.getWinner = (player1.choice === options[option]) ? 
+                            `${player1.name} is the winner!!`:
+                            `${player2.name} is the winner!!`;
                         };
                     };
                 } else {
-                    alert('This field has been taken already');
+                    alert('This field has been taken already.');
                 };
             });
         };
