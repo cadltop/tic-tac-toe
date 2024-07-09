@@ -9,6 +9,25 @@
     <script src="./script.js" defer></script>
 </head>
 <body>
+    <dialog open>
+        <form method="dialog">
+            <fieldset>
+                <legend>Write your names</legend>
+                <label for="player-1">Player 1</label>
+                <input type="text" id="player-1" name="name">
+                <label for="player-2">Player 2</label>
+                <input type="text" id="player-2" name="name">
+            </fieldset>
+            <fieldset>
+                <legend>Choose your symbol (Player 1)</legend>
+                <input type="radio" name="symbol" id="x" value="x">
+                <label for="x">O</label>
+                <input type="radio" id="o" name="symbol" value="o">
+                <label for="o">X</label>
+            </fieldset>
+            <button>Start</button>
+        </form>
+    </dialog>
     <!--<div class="choices">
         <button class="x">X</button>
         <button class="o">O</button>
