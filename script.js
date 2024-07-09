@@ -9,14 +9,17 @@ function player(name, choice) {
 
 const displayController = (function() {
     const gridSquares = document.querySelectorAll('.grid > *');
-    //const choiceButtons = document.querySelectorAll('.choices > *');
-
-    /*const markBoard = function(playerChoice, playerPosition) {
+    const markBoard = function(playerChoice, playerPosition) {
         gameBoard.board[playerPosition] = playerChoice;
         gridSquares[playerPosition].innerHTML = gameBoard.board[playerPosition];
         displayController.gridSquares[playerPosition].innerHTML = playerChoice;
-    };*/
-    return {/*gridSquares, choiceButtons, markBoard*/};
+    };
+
+    const startButton = document.querySelector('form > button');
+    const playersNames = document.querySelectorAll('input[name="name"]');
+    const player1Radios = document.querySelectorAll('input[name="symbol"]');
+
+    return {gridSquares, markBoard, startButton, playersNames, player1Radios};
 })();
 
 const game = (function() {
@@ -26,18 +29,22 @@ const game = (function() {
         circle: 'o'
     };
 
-    /*displayController.choiceButtons[0].addEventListener('click', () => {
-        afterChoice(options.cross, options.circle);
+    displayController.startButton.addEventListener('click', () => {
+        const player1Name = displayController.playersNames[0].value;
+        const player2Name = displayController.playersNames[1].value;
+
+        if(displayController.player1Radios[0].checked === true) {
+            startGame(player1Name, player2Name, options.cross, options.circle);
+        } else if(displayController.player1Radios[1].checked === true) {
+            startGame(player1Name, player2Name, options.circle, options.cross);
+        };
     });
-    displayController.choiceButtons[1].addEventListener('click', () => {
-        afterChoice(options.circle, options.cross);
-    });*/
 
-    function afterChoice(player1Choice, player2Choice) {
-        const player1 = player('Player 1', player1Choice);
-        const player2 = player('Player 2', player2Choice);
+    function startGame(player1Name, player2Name, player1Choice, player2Choice) {
+        const player1 = player(player1Name, player1Choice);
+        const player2 = player(player2Name, player2Choice);
 
-        /*for(let i = 0; i < displayController.gridSquares.length; i++) {
+        for(let i = 0; i < displayController.gridSquares.length; i++) {
             displayController.gridSquares[i].addEventListener('click', () => {
                 if(gameBoard.board[i] !== player1.choice && gameBoard.board[i] !== player2.choice) {
                     if(activePlayer === true) {
@@ -82,7 +89,7 @@ const game = (function() {
                     alert('This field has been taken already.');
                 };
             });
-        };*/
+        };
     };
     
     return {getWinner};
