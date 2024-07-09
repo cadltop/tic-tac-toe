@@ -18,12 +18,42 @@ const displayController = (function() {
     const startButton = document.querySelector('form > button');
     const playersNamesText = document.querySelectorAll('input[name="name"]');
     const player1SymbolRadios = document.querySelectorAll('input[name="symbol"]');
-
     const playersNamesCells = document.querySelectorAll('tbody > tr > td.name');
     const playersSymbolCells = document.querySelectorAll('tbody > tr > td.symbol');
     const playersTurnCells = document.querySelectorAll('tbody > tr > td.turn');
 
-    return {gridSquares, markBoard, startButton, playersNamesText, player1SymbolRadios, playersNamesCells, playersSymbolCells, playersTurnCells};
+    const setPlayersData = function() {
+        playersNamesCells[0].innerHTML = playersNamesText[0].value;
+        playersNamesCells[1].innerHTML = playersNamesText[1].value;
+
+        if(player1SymbolRadios[0].checked === true) {
+            const player1 = player(playersNamesText[0].value, 'x');
+            const player2 = player(playersNamesText[1].value, 'o');
+            setSymbolsAndTurn(player1, player2);
+            return [player1, player2]
+        } else if(player1SymbolRadios[1].checked === true) {
+            const player1 = player(playersNamesText[0].value, 'o');
+            const player2 = player(playersNamesText[1].value, 'x');
+            setSymbolsAndTurn(player1, player2);
+            return [player1, player2]
+        };
+        function setSymbolsAndTurn(player1, player2) {
+            playersSymbolCells[0].innerHTML = player1.choice;
+            playersSymbolCells[1].innerHTML = player2.choice;
+            playersTurnCells[0].innerHTML = "It's your turn!!";
+        }
+    };
+    const showTurns = function(activePlayer) {
+        if(activePlayer == true) {
+            playersTurnCells[1].innerHTML = "It's your turn!!";
+            playersTurnCells[0].innerHTML = "";
+        } else {
+            playersTurnCells[0].innerHTML = "It's your turn!!";
+            playersTurnCells[1].innerHTML = "";
+        };
+    };
+
+    return {gridSquares, markBoard, startButton, setPlayersData, showTurns};
 })();
 
 const game = (function() {
@@ -34,40 +64,16 @@ const game = (function() {
     };
 
     displayController.startButton.addEventListener('click', () => {
-        const player1Name = displayController.playersNamesText[0].value;
-        const player2Name = displayController.playersNamesText[1].value;
-
-        if(displayController.player1SymbolRadios[0].checked === true) {
-            startGame(player1Name, player2Name, options.cross, options.circle);
-        } else if(displayController.player1SymbolRadios[1].checked === true) {
-            startGame(player1Name, player2Name, options.circle, options.cross);
-        };
-    });
-
-    function startGame(player1Name, player2Name, player1Choice, player2Choice) {
-        const player1 = player(player1Name, player1Choice);
-        const player2 = player(player2Name, player2Choice);
-
-        displayController.playersNamesCells[0].innerHTML = player1Name;
-        displayController.playersNamesCells[1].innerHTML = player2Name;
-        displayController.playersSymbolCells[0].innerHTML = player1Choice;
-        displayController.playersSymbolCells[1].innerHTML = player2Choice;
-        displayController.playersTurnCells[0].innerHTML = "It's your turn!!";
-
+        const players = displayController.setPlayersData();
         for(let i = 0; i < displayController.gridSquares.length; i++) {
             displayController.gridSquares[i].addEventListener('click', () => {
-                if(gameBoard.board[i] !== player1.choice && gameBoard.board[i] !== player2.choice) {
+                if(gameBoard.board[i] !== players[0].choice && gameBoard.board[i] !== players[1].choice) {
+                    displayController.showTurns(activePlayer);
                     if(activePlayer === true) {
-                        displayController.playersTurnCells[1].innerHTML = "It's your turn!!";
-                        displayController.playersTurnCells[0].innerHTML = "";
-
-                        displayController.markBoard(player1.choice, i);
+                        displayController.markBoard(players[0].choice, i);
                         activePlayer = false;
-                    } else {
-                        displayController.playersTurnCells[0].innerHTML = "It's your turn!!";
-                        displayController.playersTurnCells[1].innerHTML = "";
-                        
-                        displayController.markBoard(player2.choice, i);
+                    } else {                        
+                        displayController.markBoard(players[1].choice, i);
                         activePlayer = true;
                     }
                     
@@ -96,9 +102,9 @@ const game = (function() {
                         };
                         
                         function declareGetWinner() {   
-                            game.getWinner = (player1.choice === options[option]) ? 
-                            `${player1.name} is the winner!!`:
-                            `${player2.name} is the winner!!`;
+                            game.getWinner = (players[0].choice === options[option]) ? 
+                            `${players[0].name} is the winner!!`:
+                            `${players[1].name} is the winner!!`;
                         };
                     };
                 } else {
@@ -106,7 +112,7 @@ const game = (function() {
                 };
             });
         };
-    };
-    
+    });
+
     return {getWinner};
 })();
