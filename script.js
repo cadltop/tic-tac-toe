@@ -16,10 +16,14 @@ const displayController = (function() {
     };
 
     const startButton = document.querySelector('form > button');
-    const playersNames = document.querySelectorAll('input[name="name"]');
-    const player1Radios = document.querySelectorAll('input[name="symbol"]');
+    const playersNamesText = document.querySelectorAll('input[name="name"]');
+    const player1SymbolRadios = document.querySelectorAll('input[name="symbol"]');
 
-    return {gridSquares, markBoard, startButton, playersNames, player1Radios};
+    const playersNamesCells = document.querySelectorAll('tbody > tr > td.name');
+    const playersSymbolCells = document.querySelectorAll('tbody > tr > td.symbol');
+    const playersTurnCells = document.querySelectorAll('tbody > tr > td.turn');
+
+    return {gridSquares, markBoard, startButton, playersNamesText, player1SymbolRadios, playersNamesCells, playersSymbolCells, playersTurnCells};
 })();
 
 const game = (function() {
@@ -30,12 +34,12 @@ const game = (function() {
     };
 
     displayController.startButton.addEventListener('click', () => {
-        const player1Name = displayController.playersNames[0].value;
-        const player2Name = displayController.playersNames[1].value;
+        const player1Name = displayController.playersNamesText[0].value;
+        const player2Name = displayController.playersNamesText[1].value;
 
-        if(displayController.player1Radios[0].checked === true) {
+        if(displayController.player1SymbolRadios[0].checked === true) {
             startGame(player1Name, player2Name, options.cross, options.circle);
-        } else if(displayController.player1Radios[1].checked === true) {
+        } else if(displayController.player1SymbolRadios[1].checked === true) {
             startGame(player1Name, player2Name, options.circle, options.cross);
         };
     });
@@ -44,13 +48,25 @@ const game = (function() {
         const player1 = player(player1Name, player1Choice);
         const player2 = player(player2Name, player2Choice);
 
+        displayController.playersNamesCells[0].innerHTML = player1Name;
+        displayController.playersNamesCells[1].innerHTML = player2Name;
+        displayController.playersSymbolCells[0].innerHTML = player1Choice;
+        displayController.playersSymbolCells[1].innerHTML = player2Choice;
+        displayController.playersTurnCells[0].innerHTML = "It's your turn!!";
+
         for(let i = 0; i < displayController.gridSquares.length; i++) {
             displayController.gridSquares[i].addEventListener('click', () => {
                 if(gameBoard.board[i] !== player1.choice && gameBoard.board[i] !== player2.choice) {
                     if(activePlayer === true) {
+                        displayController.playersTurnCells[1].innerHTML = "It's your turn!!";
+                        displayController.playersTurnCells[0].innerHTML = "";
+
                         displayController.markBoard(player1.choice, i);
                         activePlayer = false;
                     } else {
+                        displayController.playersTurnCells[0].innerHTML = "It's your turn!!";
+                        displayController.playersTurnCells[1].innerHTML = "";
+                        
                         displayController.markBoard(player2.choice, i);
                         activePlayer = true;
                     }
