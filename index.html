@@ -14,24 +14,20 @@
             <fieldset>
                 <legend>Write your names</legend>
                 <label for="player-1">Player 1</label>
-                <input type="text" id="player-1" name="name">
+                <input type="text" id="player-1" name="name" required>
                 <label for="player-2">Player 2</label>
-                <input type="text" id="player-2" name="name">
+                <input type="text" id="player-2" name="name" required>
             </fieldset>
             <fieldset>
                 <legend>Choose your symbol (Player 1)</legend>
-                <input type="radio" name="symbol" id="x" value="x">
-                <label for="x">O</label>
-                <input type="radio" id="o" name="symbol" value="o">
-                <label for="o">X</label>
+                <input type="radio" name="symbol" id="x" value="x" required>
+                <label for="x">X</label>
+                <input type="radio" id="o" name="symbol" value="o" required>
+                <label for="o">O</label>
             </fieldset>
             <button>Start</button>
         </form>
     </dialog>
-    <!--<div class="choices">
-        <button class="x">X</button>
-        <button class="o">O</button>
-    </div>
     <div class="grid">
         <div class="square-1"></div>
         <div class="square-2"></div>
@@ -42,6 +38,6 @@
         <div class="square-7"></div>
         <div class="square-8"></div>
         <div class="square-9"></div>
-    </div>-->
+    </div>
 </body>
 </html>
