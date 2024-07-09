@@ -11,8 +11,7 @@ const displayController = (function() {
     const gridSquares = document.querySelectorAll('.grid > *');
     const markBoard = function(playerChoice, playerPosition) {
         gameBoard.board[playerPosition] = playerChoice;
-        gridSquares[playerPosition].innerHTML = gameBoard.board[playerPosition];
-        displayController.gridSquares[playerPosition].innerHTML = playerChoice;
+        gridSquares[playerPosition].innerHTML = playerChoice;
     };
 
     const startButton = document.querySelector('form > button');
