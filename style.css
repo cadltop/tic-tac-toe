@@ -18,3 +18,16 @@
     width: 250px;
     font-size: 100px;
 }
+
+table {
+    background-color: black;
+}
+td {
+    background-color: white;
+    min-width: 100px;
+    text-align: center;
+    font-size: 25px;
+}
+thead {
+    font-weight: bold;
+}
