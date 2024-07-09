@@ -4,7 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
+}*/
 
 .grid {
     display: grid;
@@ -17,4 +17,4 @@
     height: 250px;
     width: 250px;
     font-size: 100px;
-}*/
+}
