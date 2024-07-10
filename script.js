@@ -12,9 +12,20 @@ const displayController = (function() {
     const startButton = document.querySelector('form > button');
     const restartButton = document.querySelector('.restart');
 
-    const markBoard = function(symbol, position) {
+    const markBoard = function(players, position, activePlayer) {
+        let symbol;
+        if(activePlayer === true) {
+            symbol = players[0].symbol
+            activePlayer = false;
+        } else {                        
+            symbol = players[1].symbol
+            activePlayer = true;
+        }
         gameBoard.board[position] = symbol;
         gridSquares[position].innerHTML = symbol;
+        changeTurns(activePlayer);
+
+        return activePlayer;
     };
     const resetBoard = function() {
         for(let i = 0; i < 9; i++) {
@@ -50,7 +61,11 @@ const displayController = (function() {
             changeTurns(true);
         }
     };
-    const changeTurns = function(activePlayer) {
+    const showWinner = function(winner) {
+        document.querySelector('.display').innerHTML = winner;
+    };
+
+    function changeTurns(activePlayer) {
         const playersTurnCells = document.querySelectorAll('tbody > tr > td.turn');
         if(activePlayer === true) {
             playersTurnCells[0].innerHTML = "It's your turn!!";
@@ -60,11 +75,8 @@ const displayController = (function() {
             playersTurnCells[0].innerHTML = "";
         };
     };
-    const showWinner = function(winner) {
-        document.querySelector('.display').innerHTML = winner;
-    };
-
-    return {gridSquares, startButton, restartButton, markBoard, resetBoard, setPlayersData, changeTurns, showWinner};
+    
+    return {gridSquares, startButton, restartButton, markBoard, resetBoard, setPlayersData, showWinner};
 })();
 
 const game = (function() {
@@ -79,15 +91,7 @@ const game = (function() {
         for(let i = 0; i < displayController.gridSquares.length; i++) {
             displayController.gridSquares[i].addEventListener('click', () => {
                 if(gameBoard.board[i] !== players[0].symbol && gameBoard.board[i] !== players[1].symbol) {
-                    if(activePlayer === true) {
-                        displayController.markBoard(players[0].symbol, i);
-                        activePlayer = false;
-                    } else {                        
-                        displayController.markBoard(players[1].symbol, i);
-                        activePlayer = true;
-                    }
-
-                    displayController.changeTurns(activePlayer);
+                   activePlayer = displayController.markBoard(players, i, activePlayer);
 
                     for(let symbol in symbols) {
                         for(let i = 0; i <= 6; i+=3){
