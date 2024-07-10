@@ -40,6 +40,7 @@ const displayController = (function() {
             playersSymbolCells[0].innerHTML = player1.choice;
             playersSymbolCells[1].innerHTML = player2.choice;
             playersTurnCells[0].innerHTML = "It's your turn!!";
+            playersTurnCells[1].innerHTML = "";
         }
     };
     const showTurns = function(activePlayer) {
@@ -56,7 +57,8 @@ const displayController = (function() {
         displayDiv.innerHTML = winner;
     };
 
-    return {gridSquares, markBoard, startButton, setPlayersData, showTurns, showWinner};
+    const restartButton = document.querySelector('.restart');
+    return {gridSquares, markBoard, startButton, setPlayersData, showTurns, showWinner, restartButton};
 })();
 
 const game = (function() {
@@ -118,5 +120,15 @@ const game = (function() {
         };
     });
 
+    displayController.restartButton.addEventListener('click', () => {
+        for(let i = 0; i < 9; i++) {
+            gameBoard.board[i] = '';
+            displayController.gridSquares[i].innerHTML = '';
+            activePlayer = true;
+            displayController.setPlayersData();
+            displayController.showWinner('');
+        }
+    });
+    
     return {getWinner};
 })();
