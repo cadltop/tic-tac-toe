@@ -22,7 +22,7 @@ const displayController = (function() {
             activePlayer = true;
         }
         gameBoard.board[position] = symbol;
-        gridSquares[position].innerHTML = symbol;
+        gridSquares[position].innerHTML = symbol.toUpperCase();
         changeTurns(activePlayer);
 
         return activePlayer;
@@ -56,8 +56,8 @@ const displayController = (function() {
             return [player1, player2]
         };
         function setSymbolsAndTurn(player1, player2) {
-            playersSymbolCells[0].innerHTML = player1.symbol;
-            playersSymbolCells[1].innerHTML = player2.symbol;
+            playersSymbolCells[0].innerHTML = player1.symbol.toUpperCase();
+            playersSymbolCells[1].innerHTML = player2.symbol.toUpperCase();
             changeTurns(true);
         }
     };
