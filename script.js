@@ -51,8 +51,12 @@ const displayController = (function() {
             playersTurnCells[1].innerHTML = "";
         };
     };
+    const showWinner = function(winner) {
+        const displayDiv = document.querySelector('.display');
+        displayDiv.innerHTML = winner;
+    };
 
-    return {gridSquares, markBoard, startButton, setPlayersData, showTurns};
+    return {gridSquares, markBoard, startButton, setPlayersData, showTurns, showWinner};
 })();
 
 const game = (function() {
@@ -104,6 +108,7 @@ const game = (function() {
                             game.getWinner = (players[0].choice === options[option]) ? 
                             `${players[0].name} is the winner!!`:
                             `${players[1].name} is the winner!!`;
+                            displayController.showWinner(game.getWinner);
                         };
                     };
                 } else {
