@@ -3,67 +3,73 @@ const gameBoard = (function() {
     return {board};
 })();
 
-function player(name, choice) {
-    return {name, choice};
+function player(name, symbol) {
+    return {name, symbol};
 };
 
 const displayController = (function() {
     const gridSquares = document.querySelectorAll('.grid > *');
-    const markBoard = function(playerChoice, playerPosition) {
-        gameBoard.board[playerPosition] = playerChoice;
-        gridSquares[playerPosition].innerHTML = playerChoice;
-    };
-
     const startButton = document.querySelector('form > button');
-    const playersNamesText = document.querySelectorAll('input[name="name"]');
-    const player1SymbolRadios = document.querySelectorAll('input[name="symbol"]');
-    const playersNamesCells = document.querySelectorAll('tbody > tr > td.name');
-    const playersSymbolCells = document.querySelectorAll('tbody > tr > td.symbol');
-    const playersTurnCells = document.querySelectorAll('tbody > tr > td.turn');
+    const restartButton = document.querySelector('.restart');
 
+    const markBoard = function(symbol, position) {
+        gameBoard.board[position] = symbol;
+        gridSquares[position].innerHTML = symbol;
+    };
+    const resetBoard = function() {
+        for(let i = 0; i < 9; i++) {
+            gameBoard.board[i] = '';
+            displayController.gridSquares[i].innerHTML = '';
+        }
+        changeTurns(true);
+        showWinner('');
+    };
     const setPlayersData = function() {
-        playersNamesCells[0].innerHTML = playersNamesText[0].value;
-        playersNamesCells[1].innerHTML = playersNamesText[1].value;
+        const playersNamesTexts = document.querySelectorAll('input[name="name"]');
+        const player1SymbolRadios = document.querySelectorAll('input[name="symbol"]');
+        const playersNamesCells = document.querySelectorAll('tbody > tr > td.name');
+        const playersSymbolCells = document.querySelectorAll('tbody > tr > td.symbol');
+
+        playersNamesCells[0].innerHTML = playersNamesTexts[0].value;
+        playersNamesCells[1].innerHTML = playersNamesTexts[1].value;
 
         if(player1SymbolRadios[0].checked === true) {
-            const player1 = player(playersNamesText[0].value, 'x');
-            const player2 = player(playersNamesText[1].value, 'o');
+            const player1 = player(playersNamesTexts[0].value, 'x');
+            const player2 = player(playersNamesTexts[1].value, 'o');
             setSymbolsAndTurn(player1, player2);
             return [player1, player2]
         } else if(player1SymbolRadios[1].checked === true) {
-            const player1 = player(playersNamesText[0].value, 'o');
-            const player2 = player(playersNamesText[1].value, 'x');
+            const player1 = player(playersNamesTexts[0].value, 'o');
+            const player2 = player(playersNamesTexts[1].value, 'x');
             setSymbolsAndTurn(player1, player2);
             return [player1, player2]
         };
         function setSymbolsAndTurn(player1, player2) {
-            playersSymbolCells[0].innerHTML = player1.choice;
-            playersSymbolCells[1].innerHTML = player2.choice;
-            playersTurnCells[0].innerHTML = "It's your turn!!";
-            playersTurnCells[1].innerHTML = "";
+            playersSymbolCells[0].innerHTML = player1.symbol;
+            playersSymbolCells[1].innerHTML = player2.symbol;
+            changeTurns(true);
         }
     };
-    const showTurns = function(activePlayer) {
-        if(activePlayer == true) {
-            playersTurnCells[1].innerHTML = "It's your turn!!";
-            playersTurnCells[0].innerHTML = "";
-        } else {
+    const changeTurns = function(activePlayer) {
+        const playersTurnCells = document.querySelectorAll('tbody > tr > td.turn');
+        if(activePlayer === true) {
             playersTurnCells[0].innerHTML = "It's your turn!!";
             playersTurnCells[1].innerHTML = "";
+        } else {
+            playersTurnCells[1].innerHTML = "It's your turn!!";
+            playersTurnCells[0].innerHTML = "";
         };
     };
     const showWinner = function(winner) {
-        const displayDiv = document.querySelector('.display');
-        displayDiv.innerHTML = winner;
+        document.querySelector('.display').innerHTML = winner;
     };
 
-    const restartButton = document.querySelector('.restart');
-    return {gridSquares, markBoard, startButton, setPlayersData, showTurns, showWinner, restartButton};
+    return {gridSquares, startButton, restartButton, markBoard, resetBoard, setPlayersData, changeTurns, showWinner};
 })();
 
 const game = (function() {
-    let getWinner, activePlayer = true;
-    const options = {
+    let winner, activePlayer = true;
+    const symbols = {
         cross: 'x',
         circle: 'o'
     };
@@ -72,45 +78,46 @@ const game = (function() {
         const players = displayController.setPlayersData();
         for(let i = 0; i < displayController.gridSquares.length; i++) {
             displayController.gridSquares[i].addEventListener('click', () => {
-                if(gameBoard.board[i] !== players[0].choice && gameBoard.board[i] !== players[1].choice) {
-                    displayController.showTurns(activePlayer);
+                if(gameBoard.board[i] !== players[0].symbol && gameBoard.board[i] !== players[1].symbol) {
                     if(activePlayer === true) {
-                        displayController.markBoard(players[0].choice, i);
+                        displayController.markBoard(players[0].symbol, i);
                         activePlayer = false;
                     } else {                        
-                        displayController.markBoard(players[1].choice, i);
+                        displayController.markBoard(players[1].symbol, i);
                         activePlayer = true;
                     }
-                    
-                    for(let option in options) {
+
+                    displayController.changeTurns(activePlayer);
+
+                    for(let symbol in symbols) {
                         for(let i = 0; i <= 6; i+=3){
-                            if(gameBoard.board[i] === options[option] && 
-                                gameBoard.board[i+1] === options[option] && 
-                                gameBoard.board[+2] === options[option]) {
-                                declareGetWinner();
+                            if(gameBoard.board[i] === symbols[symbol] && 
+                                gameBoard.board[i+1] === symbols[symbol] && 
+                                gameBoard.board[+2] === symbols[symbol]) {
+                                getWinner();
                             };
                         };
                         for(let i = 0; i <= 2; i++){
-                            if(gameBoard.board[i] === options[option] && 
-                                gameBoard.board[i+3] === options[option] && 
-                                gameBoard.board[i+6] === options[option]) {
-                                declareGetWinner();
+                            if(gameBoard.board[i] === symbols[symbol] && 
+                                gameBoard.board[i+3] === symbols[symbol] && 
+                                gameBoard.board[i+6] === symbols[symbol]) {
+                                getWinner();
                             };
                         };
-                        if((gameBoard.board[0] === options[option] && 
-                            gameBoard.board[4] === options[option] && 
-                            gameBoard.board[8] === options[option]) ||
-                            (gameBoard.board[2] === options[option] && 
-                            gameBoard.board[4] === options[option] && 
-                            gameBoard.board[6] === options[option])) {
-                            declareGetWinner();
+                        if((gameBoard.board[0] === symbols[symbol] && 
+                            gameBoard.board[4] === symbols[symbol] && 
+                            gameBoard.board[8] === symbols[symbol]) ||
+                            (gameBoard.board[2] === symbols[symbol] && 
+                            gameBoard.board[4] === symbols[symbol] && 
+                            gameBoard.board[6] === symbols[symbol])) {
+                            getWinner();
                         };
                         
-                        function declareGetWinner() {   
-                            game.getWinner = (players[0].choice === options[option]) ? 
+                        function getWinner() {   
+                            game.winner = (players[0].symbol === symbols[symbol]) ? 
                             `${players[0].name} is the winner!!`:
                             `${players[1].name} is the winner!!`;
-                            displayController.showWinner(game.getWinner);
+                            displayController.showWinner(game.winner);
                         };
                     };
                 } else {
@@ -121,14 +128,10 @@ const game = (function() {
     });
 
     displayController.restartButton.addEventListener('click', () => {
-        for(let i = 0; i < 9; i++) {
-            gameBoard.board[i] = '';
-            displayController.gridSquares[i].innerHTML = '';
-            activePlayer = true;
-            displayController.setPlayersData();
-            displayController.showWinner('');
-        }
+        displayController.resetBoard();
+        activePlayer = true;
+        game.winner = undefined;
     });
     
-    return {getWinner};
+    return {winner};
 })();
