@@ -40,6 +40,7 @@ thead {
     width: fit-content;
     height: auto;
     padding: 20px 20px;
+    text-align: center;
 }
 .display {
     min-width: 400px;
