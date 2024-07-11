@@ -8,6 +8,8 @@ function player(name, symbol) {
 };
 
 const displayController = (function() {
+    document.querySelector('dialog').showModal();
+    
     const gridSquares = document.querySelectorAll('.grid > *');
     const startButton = document.querySelector('form > button');
     const restartButton = document.querySelector('.restart');
