@@ -35,7 +35,7 @@ const displayController = (function() {
             displayController.gridSquares[i].innerHTML = '';
         }
         changeTurns(true);
-        showWinner('');
+        document.querySelector('.display').innerHTML = "";
     };
     const setPlayersData = function() {
         const playersNamesTexts = document.querySelectorAll('input[name="name"]');
@@ -65,6 +65,8 @@ const displayController = (function() {
     };
     const showWinner = function(winner) {
         document.querySelector('.display').innerHTML = winner;
+        document.querySelector('tbody > .player-1 > td.turn').innerHTML = "";
+        document.querySelector('tbody > .player-2 > td.turn').innerHTML = "";
     };
 
     function changeTurns(activePlayer) {
@@ -99,7 +101,7 @@ const game = (function() {
                         for(let i = 0; i <= 6; i+=3){
                             if(gameBoard.board[i] === symbols[symbol] && 
                                 gameBoard.board[i+1] === symbols[symbol] && 
-                                gameBoard.board[+2] === symbols[symbol]) {
+                                gameBoard.board[i+2] === symbols[symbol]) {
                                 getWinner();
                             };
                         };
