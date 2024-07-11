@@ -3,19 +3,30 @@
     --container: #0a3547;
     --content: #1b4458;
 }
+* {
+    color: white;
+}
 body {
     height: 100vh;
     width: 100vw;
     background-color: #051b25;
 }
+button  {
+    padding: 5px 15px;
+    max-width: fit-content;
+    align-self: center;
+    background-color: #e2ad00;
+    font-weight: bold;
+    border: solid var(--transparent);
+    border-radius: 10px;
+}
+.grid > *, .result, .display {
+    border: 2px white solid;
+    background-color: var(--container);
+}
 /*dialog view*/
 ::backdrop {
     backdrop-filter: blur(15px);
-}
-
-dialog, form *  {
-    border-radius: 10px;
-    color: white;
 }
 dialog {
     font-size: 25px;
@@ -50,18 +61,9 @@ input[type="radio"] {
     width: 20px;
     height: 20px;
 }
-form > button {
-    padding: 5px 15px;
-    max-width: fit-content;
-    align-self: center;
-    background-color: #e2ad00;
-    font-weight: bold;
-    border: solid var(--transparent);
-}
-/*other*/
+/*table view*/
 table {
     background-color: white;
-    color: white;
 }
 td {
     min-width: 100px;
@@ -76,7 +78,7 @@ thead {
 tbody {
     background-color: var(--content);
 }
-
+/*grid view*/
 .grid {
     display: grid;
     grid-template: repeat(3, 1fr)/repeat(3, 1fr);
@@ -84,25 +86,31 @@ tbody {
     width: fit-content;
 }
 .grid > * {
-    border: 2px black solid;
-    height: 250px;
-    width: 250px;
-    font-size: 100px;
+    border: 2px white solid;
+    background-color: var(--container);
+    height: 150px;
+    width: 150px;
+    font-size: 125px;
+    text-align: center;
 }
-
-.result, .display {
-    border: 2px black solid;
-}
+/*result view*/
 .result {
     font-size: 30px;
     width: fit-content;
-    height: auto;
+    height: 110px;
     padding: 20px 20px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+p {
+    /*border: 2px red solid;*/
+    margin: 0 0 15px;
 }
 .display {
-    min-width: 400px;
-    min-height: 100px;
+    background-color: var(--content);
+    min-width: 375px;
+    min-height: 40px;
     width: fit-content;
-    height: auto;
+    height: fit-content;
 }
