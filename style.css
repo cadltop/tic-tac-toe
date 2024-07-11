@@ -3,6 +3,55 @@ body {
     width: 100vw;
 }
 
+::backdrop {
+    backdrop-filter: blur(15px);
+}
+
+dialog, form *  {
+    border-radius: 10px;
+    color: white;
+}
+dialog {
+    font-size: 25px;
+    background-color: #0a3547;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+fieldset {
+    text-align: center;
+    border-top: #00000000 solid;
+    border-left: #00000000 solid;
+    border-right: #00000000 solid;
+}
+legend {
+    font-weight: bold;
+}
+label[for="player-2"], #o {
+    margin-left: 20px;
+}
+input[type="text"] {
+    background-color: #1b4458;
+    border: 2px solid white;
+}
+input[type="text"]:focus {
+    outline: 1px solid white;
+}
+input[type="radio"] {
+    border: 0px;
+    width: 20px;
+    height: 20px;
+}
+form > button {
+    padding: 5px 15px;
+    max-width: fit-content;
+    align-self: center;
+    background-color: #e2ad00;
+    font-weight: bold;
+    border: solid #00000000;
+}
 .grid {
     display: grid;
     grid-template: repeat(3, 1fr)/repeat(3, 1fr);
