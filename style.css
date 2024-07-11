@@ -1,8 +1,14 @@
+:root {
+    --transparent: #00000000;
+    --container: #0a3547;
+    --content: #1b4458;
+}
 body {
     height: 100vh;
     width: 100vw;
+    background-color: #051b25;
 }
-
+/*dialog view*/
 ::backdrop {
     backdrop-filter: blur(15px);
 }
@@ -13,7 +19,7 @@ dialog, form *  {
 }
 dialog {
     font-size: 25px;
-    background-color: #0a3547;
+    background-color: var(--container);
 }
 form {
     display: flex;
@@ -22,9 +28,9 @@ form {
 }
 fieldset {
     text-align: center;
-    border-top: #00000000 solid;
-    border-left: #00000000 solid;
-    border-right: #00000000 solid;
+    border-top: var(--transparent) solid;
+    border-left: var(--transparent) solid;
+    border-right: var(--transparent) solid;
 }
 legend {
     font-weight: bold;
@@ -33,7 +39,7 @@ label[for="player-2"], #o {
     margin-left: 20px;
 }
 input[type="text"] {
-    background-color: #1b4458;
+    background-color: var(--content);
     border: 2px solid white;
 }
 input[type="text"]:focus {
@@ -50,8 +56,27 @@ form > button {
     align-self: center;
     background-color: #e2ad00;
     font-weight: bold;
-    border: solid #00000000;
+    border: solid var(--transparent);
 }
+/*other*/
+table {
+    background-color: white;
+    color: white;
+}
+td {
+    min-width: 100px;
+    text-align: center;
+    font-size: 25px;
+    padding: 5px 5px;
+}
+thead {
+    background-color: var(--container);
+    font-weight: bold;
+}
+tbody {
+    background-color: var(--content);
+}
+
 .grid {
     display: grid;
     grid-template: repeat(3, 1fr)/repeat(3, 1fr);
@@ -63,19 +88,6 @@ form > button {
     height: 250px;
     width: 250px;
     font-size: 100px;
-}
-
-table {
-    background-color: black;
-}
-td {
-    background-color: white;
-    min-width: 100px;
-    text-align: center;
-    font-size: 25px;
-}
-thead {
-    font-weight: bold;
 }
 
 .result, .display {
